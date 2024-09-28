@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/convectorFragment">
+    <fragment
+        android:id="@+id/convectorFragment"
+        android:name="com.example.gekonapp.presentation.convectorFragment.view.ConvectorFragment"
+        android:label="ConvectorFragment" >
+        <action
+            android:id="@+id/action_convectorFragment_to_shopCartFragment"
+            app:destination="@id/ShopCartFragment" >
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/ShopCartFragment"
+        android:name="com.example.gekonapp.presentation.shoppingCartFragment.view.ShopCartFragment"
+        android:label="ShopCartFragment" >
+        <action
+            android:id="@+id/action_shopCartFragment_to_convectorFragment"
+            app:destination="@id/convectorFragment" />
+    </fragment>
+</navigation>
