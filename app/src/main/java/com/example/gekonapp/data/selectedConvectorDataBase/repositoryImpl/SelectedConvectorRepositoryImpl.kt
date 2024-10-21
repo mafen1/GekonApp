@@ -9,8 +9,25 @@ import javax.inject.Singleton
 @Singleton
 class SelectedConvectorRepositoryImpl @Inject constructor(
     private val selectedConvectorDao: SelectedConvectorDao
-): SelectedConvectorRepository {
+) : SelectedConvectorRepository {
     override suspend fun addSelectedConvector(selectedConvector: SelectedConvectorEntity) {
         selectedConvectorDao.addSelectedConvector(selectedConvector)
     }
+
+
+
+    override fun deleteConvectorByParams(
+        number: Int,
+        article: String,
+        name: String,
+        power: Int,
+        price: String,
+        count: Int
+    ) {
+        selectedConvectorDao.deleteConvectorByParams(
+            number, article, name, power, price, count
+        )
+    }
+
+    override suspend fun getConvector(): MutableList<SelectedConvectorEntity> = selectedConvectorDao.getConvectorByParams()
 }

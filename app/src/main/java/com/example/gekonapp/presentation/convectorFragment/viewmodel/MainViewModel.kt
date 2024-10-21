@@ -1,7 +1,6 @@
 package com.example.gekonapp.presentation.convectorFragment.viewmodel
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,6 +35,7 @@ class MainViewModel @Inject constructor(
     private var selectedColor: MutableLiveData<String> = MutableLiveData("")
     var article: MutableLiveData<String> = MutableLiveData("")
     var convector: MutableLiveData<ConvectorEntity> = MutableLiveData()
+    var number: MutableLiveData<Int> = MutableLiveData(4)
 
 
     // инициализируем модель конвектора
@@ -280,23 +280,18 @@ class MainViewModel @Inject constructor(
         ) {
 
             viewModelScope.launch(Dispatchers.IO) {
-                var number = 4
                 val entity = convectorRepositoryImpl.getByArticle(article.value.toString())
-                Log.d("TAG", entity.article.toString())
-                Log.d("TAG", entity.name.toString())
-                Log.d("TAG", entity.power!!.toInt().toString())
-                Log.d("TAG", entity.price.toString())
-                Log.d("TAG", "${number}")
-                Log.d("TAG", "${number}")
+
+
                 val selectedConvector = SelectedConvectorEntity(
                     article = entity.article.toString(),
                     name = entity.name.toString(),
                     power = entity.power!!.toInt(),
                     price = entity.price.toString(),
-                    count = number,
-                    number = number
+                    count = number.value!!,
+                    number = number.value!!
                 )
-                number +=1
+
                 selectedRepositoryImpl.addSelectedConvector(
                     selectedConvector
                 )

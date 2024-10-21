@@ -5,7 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.gekonapp.data.selectedConvectorDataBase.SelectedConvectorEntity
 import com.example.gekonapp.databinding.FragmentShopCartBinding
+import com.example.gekonapp.presentation.shoppingCartFragment.recylerView.ShoppingAdapter
+import com.example.gekonapp.presentation.shoppingCartFragment.viewModel.ShopViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -13,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class ShopCartFragment : Fragment() {
 
     private lateinit var binding: FragmentShopCartBinding
+    private val selectedViewModel: ShopViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,11 +36,15 @@ class ShopCartFragment : Fragment() {
     }
 
     private fun initView(){
+        selectedViewModel.selectedConvectorList()
+        initAdapter(selectedViewModel.selectedConvectorList.value!!)
 
     }
 
-    private fun initAdapter(shopList: MutableList<String>){
-//        binding.rcView.adapter = ShoppingAdapter(shopList)
+    private fun initAdapter(selectedConvectorList: MutableList<SelectedConvectorEntity>){
+
+        binding.rcView1.adapter = ShoppingAdapter(selectedConvectorList, selectedViewModel)
+        binding.rcView1.layoutManager = LinearLayoutManager(binding.root.context)
     }
 
 

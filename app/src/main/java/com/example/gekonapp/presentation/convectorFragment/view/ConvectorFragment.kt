@@ -129,6 +129,7 @@ class ConvectorFragment : Fragment() {
             binding.rcView.adapter = convectorAdapter
             binding.rcView.layoutManager = GridLayoutManager(requireContext(), 1)
         }
+        mainViewModel.number.value = mainViewModel.number.value?.plus(1)
     }
 
     private fun initFAB() {

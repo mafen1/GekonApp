@@ -70,51 +70,6 @@ class ConvectorAdapter @Inject constructor(
         holder.bind(convectorList[position]!!, holder.itemView.context)
     }
 
-    private fun initViewAdapter(
-        binding: ConvectorItemBinding,
-        convector: ConvectorEntity,
-        context: Context,
-        viewHolder: ConvectorViewHolder
-    ) {
-
-        binding.tvConvectorName.text = convector.name
-        binding.tvResultArticle.text = convector.article
-        binding.tvPriceConvector.text = "0.0"
-        binding.tvTeplo.text = "Теплоотдача: ${convector.power.toString()}"
-
-        checkCountPrice(binding, convector)
-
-        binding.btnPlus.setOnClickListener {
-            binding.tvCountPrice.text = (
-                    binding.tvCountPrice.text.toString().toInt() + 1
-                    ).toString()
-
-            checkCountPrice(binding, convector)
-        }
-        binding.btnMinus.setOnClickListener {
-            binding.tvCountPrice.text = (
-                    if (binding.tvCountPrice.text.toString().toInt() < 1) {
-                        Toast.makeText(
-                            context,
-                            "Укажите корректное значение для напольного конвектора",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        binding.tvCountPrice.text.toString().toInt()
-                    } else {
-                        binding.tvCountPrice.text.toString().toInt() - 1
-                    }
-                    ).toString()
-
-            checkCountPrice(binding, convector)
-        }
-
-        binding.button5.setOnClickListener {
-//            val position = abso
-//            if (position != RecyclerView.NO_POSITION) {
-//                listener.onItemClick(dataList[position])
-//            }
-        }
-    }
 
     private fun checkCountPrice(binding: ConvectorItemBinding, convector: ConvectorEntity) {
         val count =

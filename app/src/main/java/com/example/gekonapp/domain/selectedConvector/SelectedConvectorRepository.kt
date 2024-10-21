@@ -6,4 +6,15 @@ interface SelectedConvectorRepository {
 
     suspend fun addSelectedConvector(selectedConvector: SelectedConvectorEntity)
 
+
+    fun deleteConvectorByParams(
+        number: Int,
+        article: String,
+        name: String,
+        power: Int,
+        price: String,
+        count: Int
+    )
+
+    suspend fun getConvector(): MutableList<SelectedConvectorEntity>
 }
