@@ -39,6 +39,7 @@ class MainViewModel @Inject constructor(
     var number: MutableLiveData<Int> = MutableLiveData(1)
 
 
+
     // инициализируем модель конвектора
     fun addModel(models: String) {
         when (models) {
@@ -255,6 +256,7 @@ class MainViewModel @Inject constructor(
             "weight" -> selectedWeight.value = selectedDimensions.toFloat()
             "length" -> selectedLength.value = selectedDimensions.toFloat()
         }
+        Log.d("TAG", selectedHigh.value.toString())
 
     }
 

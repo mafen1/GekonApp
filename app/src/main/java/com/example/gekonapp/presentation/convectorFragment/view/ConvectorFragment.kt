@@ -3,6 +3,7 @@ package com.example.gekonapp.presentation.convectorFragment.view
 import HeightPickerDialogFragment
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +34,7 @@ class ConvectorFragment : Fragment() {
     }
 
     private fun initView() {
-
+        initObserve()
         binding.btnEcoModel.setOnClickListener {
             setupTextColor("Eco", "model")
 
@@ -51,8 +52,6 @@ class ConvectorFragment : Fragment() {
 
         }
         binding.buttonH.setOnClickListener {
-
-            // todo добавить обработчик ошибки если highList=null
             initPickerDialog(mainViewModel.highList.value!!, "high")
         }
 
@@ -145,12 +144,15 @@ class ConvectorFragment : Fragment() {
                 }
 
                 mainViewModel.addModel(buttons[selectedButton]?.text.toString())
+
+                Log.d("TAG", buttons[selectedButton]?.text.toString())
             }
         }
     }
 
     private fun setupResult() {
         if (mainViewModel.convector.value!!.model!!.isNotEmpty()) {
+
             binding.tvArticle.visibility = View.VISIBLE
             binding.tvResultArticle.visibility = View.VISIBLE
             binding.tvResultArticle.visibility = View.VISIBLE
@@ -160,6 +162,7 @@ class ConvectorFragment : Fragment() {
             binding.tvCount.visibility = View.VISIBLE
             binding.tvResultPrice.visibility = View.VISIBLE
             binding.tvPrice.visibility = View.VISIBLE
+            binding.btnShop.visibility = View.VISIBLE
 
             binding.tvResultArticle.text = mainViewModel.convector.value!!.article.toString()
             binding.tvPrice.text = mainViewModel.convector.value!!.price.toString()
@@ -207,9 +210,21 @@ class ConvectorFragment : Fragment() {
     private fun initPickerDialog(selectedArray: Array<String>, dimension: String) {
         val heightPickerDialog = HeightPickerDialogFragment(selectedArray)
         heightPickerDialog.setOnHeightSelectedListener { selectedLength ->
+
             mainViewModel.selectedDimensions(selectedLength, dimension)
+
         }
         heightPickerDialog.show(parentFragmentManager, "heightPicker")
+    }
+
+
+    private fun initObserve(){
+        mainViewModel.selectedHigh.observe(viewLifecycleOwner){ value ->
+            if (value != null){
+                binding.buttonH.visibility = View.INVISIBLE
+                binding.tvHigh.text = mainViewModel.selectedHigh.value.toString()
+            }
+        }
     }
 
 }
