@@ -3,5 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="green">#AFC945</color>
+    <color name = "background">#333333</color>
+    <color name = "backgroundButtonModel">#4D4D4D</color>
+    <color name = "textColor">#B3B3B3</color>
+    <color name = "selectedText">#B3B3B3</color>
 
 </resources>

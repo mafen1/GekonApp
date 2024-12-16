@@ -1,6 +1,7 @@
 package com.example.gekonapp.presentation.convectorFragment.viewmodel
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,11 +24,11 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var model: MutableLiveData<String> = MutableLiveData("")
-    var highList: MutableLiveData<List<String>> = MutableLiveData(listOf())
-    var weightList: MutableLiveData<List<String>> = MutableLiveData(listOf())
-    var lengthList: MutableLiveData<List<String>> = MutableLiveData(listOf())
+    var highList: MutableLiveData<Array<String>> = MutableLiveData(arrayOf())
+    var weightList: MutableLiveData<Array<String>> = MutableLiveData(arrayOf())
+    var lengthList: MutableLiveData<Array<String>> = MutableLiveData(arrayOf())
 
-    private var selectedHigh: MutableLiveData<Float> = MutableLiveData()
+    var selectedHigh: MutableLiveData<Float> = MutableLiveData()
     private var selectedWeight: MutableLiveData<Float> = MutableLiveData()
     private var selectedLength: MutableLiveData<Float> = MutableLiveData()
 
@@ -35,7 +36,7 @@ class MainViewModel @Inject constructor(
     private var selectedColor: MutableLiveData<String> = MutableLiveData("")
     var article: MutableLiveData<String> = MutableLiveData("")
     var convector: MutableLiveData<ConvectorEntity> = MutableLiveData()
-    var number: MutableLiveData<Int> = MutableLiveData(4)
+    var number: MutableLiveData<Int> = MutableLiveData(1)
 
 
     // инициализируем модель конвектора
@@ -67,8 +68,8 @@ class MainViewModel @Inject constructor(
     private fun choiceHigh() {
         when (model.value) {
             "GETL" -> {
-                highList.value = listOf("008", "009", "011", "014", "019")
-                lengthList.value = listOf(
+                highList.value = arrayOf("008", "009", "011", "014", "019")
+                lengthList.value = arrayOf(
                     "060",
                     "070",
                     "080",
@@ -114,7 +115,7 @@ class MainViewModel @Inject constructor(
                     "480",
                     "490"
                 )
-                weightList.value = listOf(
+                weightList.value = arrayOf(
                     "18",
                     "23",
                     "30",
@@ -123,13 +124,13 @@ class MainViewModel @Inject constructor(
             }
 
             "GDTL" -> {
-                highList.value = listOf("008", "009", "011", "014", "019")
-                weightList.value = listOf(
+                highList.value = arrayOf("008", "009", "011", "014", "019")
+                weightList.value = arrayOf(
                     "23",
                     "30",
                     "38"
                 )
-                lengthList.value = listOf(
+                lengthList.value = arrayOf(
                     "090",
                     "100",
                     "110",
@@ -175,13 +176,13 @@ class MainViewModel @Inject constructor(
             }
 
             "GLUF" -> {
-                highList.value = listOf("008", "013", "018", "023", "028", "035")
-                weightList.value = listOf(
+                highList.value = arrayOf("008", "013", "018", "023", "028", "035")
+                weightList.value = arrayOf(
                     "13",
                     "18",
                     "23"
                 )
-                lengthList.value = listOf(
+                lengthList.value = arrayOf(
                     "040",
                     "050",
                     "060",
@@ -213,14 +214,14 @@ class MainViewModel @Inject constructor(
             }
 
             "GLUW" -> {
-                highList.value = listOf("013", "020", "030", "040", "050")
-                weightList.value = listOf(
+                highList.value = arrayOf("013", "020", "030", "040", "050")
+                weightList.value = arrayOf(
                     "08",
                     "13",
                     "18",
                     "23"
                 )
-                lengthList.value = listOf(
+                lengthList.value = arrayOf(
                     "040\n",
                     "050\n",
                     "060\n",
@@ -254,11 +255,13 @@ class MainViewModel @Inject constructor(
             "weight" -> selectedWeight.value = selectedDimensions.toFloat()
             "length" -> selectedLength.value = selectedDimensions.toFloat()
         }
+
     }
 
     fun initTypeLattice(lattice: String) {
-        selectedLattice.value = lattice
+        selectedLattice.value = lattice 
     }
+
 
     fun initSelectedColor(color: String) {
         selectedColor.value = color
@@ -270,6 +273,8 @@ class MainViewModel @Inject constructor(
         val length = resultLength.toString().replace(".", "")
         article.value =
             "${model.value}${resultHigh}${length}0${selectedWeight.value?.toInt()}/${selectedLattice.value}${selectedColor.value}/NV"
+
+        Log.d("TAG", article.value.toString())
 
         if (model.value!!.isNotEmpty()
             && resultLength.toString().isNotEmpty()
