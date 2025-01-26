@@ -28,16 +28,16 @@ class MainViewModel @Inject constructor(
     var weightList: MutableLiveData<Array<String>> = MutableLiveData(arrayOf())
     var lengthList: MutableLiveData<Array<String>> = MutableLiveData(arrayOf())
 
-    var selectedHigh: MutableLiveData<Float> = MutableLiveData()
-    private var selectedWeight: MutableLiveData<Float> = MutableLiveData()
-    private var selectedLength: MutableLiveData<Float> = MutableLiveData()
+    var selectedHigh: MutableLiveData<String> = MutableLiveData()
+    var selectedWeight: MutableLiveData<String> = MutableLiveData()
+    var selectedLength: MutableLiveData<String> = MutableLiveData()
 
     private var selectedLattice: MutableLiveData<String> = MutableLiveData("")
     private var selectedColor: MutableLiveData<String> = MutableLiveData("")
     var article: MutableLiveData<String> = MutableLiveData("")
     var convector: MutableLiveData<ConvectorEntity> = MutableLiveData()
-    var number: MutableLiveData<Int> = MutableLiveData(1)
-
+    var number: MutableLiveData<Int> = MutableLiveData(0)
+    var count: MutableLiveData<Int> = MutableLiveData(0)
 
 
     // инициализируем модель конвектора
@@ -252,16 +252,16 @@ class MainViewModel @Inject constructor(
     // выбираем габариты
     fun selectedDimensions(selectedDimensions: String, dimensions: String) {
         when (dimensions) {
-            "high" -> selectedHigh.value = selectedDimensions.toFloat()
-            "weight" -> selectedWeight.value = selectedDimensions.toFloat()
-            "length" -> selectedLength.value = selectedDimensions.toFloat()
+            "high" -> selectedHigh.value = selectedDimensions
+            "weight" -> selectedWeight.value = selectedDimensions
+            "length" -> selectedLength.value = selectedDimensions
         }
         Log.d("TAG", selectedHigh.value.toString())
 
     }
 
     fun initTypeLattice(lattice: String) {
-        selectedLattice.value = lattice 
+        selectedLattice.value = lattice
     }
 
 
@@ -269,9 +269,13 @@ class MainViewModel @Inject constructor(
         selectedColor.value = color
     }
 
+    fun initCount(countConvector: String) {
+        count.value = countConvector.toInt()
+    }
+
     fun result(context: Context) {
-        val resultHigh = selectedHigh.value?.div(1000)
-        val resultLength = selectedLength.value?.div(100)
+        val resultHigh = selectedHigh.value?.toFloat()?.div(1000)
+        val resultLength = selectedLength.value?.toFloat()?.div(100)
         val length = resultLength.toString().replace(".", "")
         article.value =
             "${model.value}${resultHigh}${length}0${selectedWeight.value?.toInt()}/${selectedLattice.value}${selectedColor.value}/NV"
@@ -289,19 +293,6 @@ class MainViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.IO) {
                 val entity = convectorRepositoryImpl.getByArticle(article.value.toString())
 
-
-                val selectedConvector = SelectedConvectorEntity(
-                    article = entity.article.toString(),
-                    name = entity.name.toString(),
-                    power = entity.power!!.toInt(),
-                    price = entity.price.toString(),
-                    count = number.value!!,
-                    number = number.value!!
-                )
-
-                selectedRepositoryImpl.addSelectedConvector(
-                    selectedConvector
-                )
                 withContext(Dispatchers.Main) {
                     convector.value = entity
                 }
@@ -312,7 +303,24 @@ class MainViewModel @Inject constructor(
 
     }
 
+    fun addSelectedConvector() {
 
+        viewModelScope.launch(Dispatchers.IO) {
+            selectedRepositoryImpl.addSelectedConvector(
+                SelectedConvectorEntity(
+                    number = number.value!!,
+                    article = convector.value?.article!!,
+                    name = convector.value?.name!!,
+                    power = convector.value?.power!!,
+                    price = convector.value?.price!!,
+                    count = count.value!!
+                )
+            )
+            withContext(Dispatchers.Main) {
+                number.value = number.value!! + 1
+            }
+        }
+    }
 
 
 }

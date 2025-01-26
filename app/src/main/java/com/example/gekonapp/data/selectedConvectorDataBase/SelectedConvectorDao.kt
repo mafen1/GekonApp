@@ -10,7 +10,7 @@ interface SelectedConvectorDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addSelectedConvector(selectedConvector: SelectedConvectorEntity)
 
-        @Query("SELECT * FROM selectedConvectorDB ")
+        @Query("SELECT * FROM selectedConvectorDB")
         suspend fun getConvectorByParams(): MutableList<SelectedConvectorEntity> // Вернется полный список объектов
 
     @Query("""

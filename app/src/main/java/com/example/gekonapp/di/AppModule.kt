@@ -28,29 +28,15 @@ class AppModule {
             .createFromAsset("databasegekon1.db")
             .build()
     }
-        @Provides
-        @Singleton
-        fun provideConvectorDao(database: ConvectorDataBase) = database.convectorDao()
+
+    @Provides
+    @Singleton
+    fun provideConvectorDao(database: ConvectorDataBase) = database.convectorDao()
 
 
     @Provides
     @Singleton
     fun provideSelectedConvectorDao(database: ConvectorDataBase) = database.selectedConvectorDao()
-
-//    @Provides
-//    fun provideSelectedConvectorDatabase(@ApplicationContext context: Context): SelectedConvector {
-//        return Room.databaseBuilder(
-//            context.applicationContext,
-//            SelectedConvector::class.java,
-//            "selectedConvectorDB"
-//        )
-//            .build()
-//    }
-//
-//    @Provides
-//    @Singleton
-//    fun provideSelectedConvectorDao(database: SelectedConvector) = database.convectorDao()
-
 
 
 }

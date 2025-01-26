@@ -3,13 +3,14 @@ package com.example.gekonapp.presentation.convectorFragment.view
 import HeightPickerDialogFragment
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.example.gekonapp.R
 import com.example.gekonapp.databinding.FragmentConvectorBinding
 import com.example.gekonapp.presentation.convectorFragment.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,7 +38,6 @@ class ConvectorFragment : Fragment() {
         initObserve()
         binding.btnEcoModel.setOnClickListener {
             setupTextColor("Eco", "model")
-
         }
         binding.btnLevelFModel.setOnClickListener {
             setupTextColor("Level F", "model")
@@ -98,6 +98,13 @@ class ConvectorFragment : Fragment() {
         binding.btnMinus.setOnClickListener {
             initCounter("-")
         }
+        binding.ivShop.setOnClickListener {
+            findNavController().navigate(R.id.action_convectorFragment_to_shopCartFragment)
+        }
+        binding.btnShop.setOnClickListener {
+            mainViewModel.initCount(binding.tvCount.text.toString())
+            mainViewModel.addSelectedConvector()
+        }
     }
 
     private fun setupTextColor(selectedButton: String, groupButton: String) {
@@ -145,7 +152,7 @@ class ConvectorFragment : Fragment() {
 
                 mainViewModel.addModel(buttons[selectedButton]?.text.toString())
 
-                Log.d("TAG", buttons[selectedButton]?.text.toString())
+
             }
         }
     }
@@ -218,11 +225,23 @@ class ConvectorFragment : Fragment() {
     }
 
 
-    private fun initObserve(){
-        mainViewModel.selectedHigh.observe(viewLifecycleOwner){ value ->
-            if (value != null){
+    private fun initObserve() {
+        mainViewModel.selectedHigh.observe(viewLifecycleOwner) { value ->
+            if (value != null) {
                 binding.buttonH.visibility = View.INVISIBLE
                 binding.tvHigh.text = mainViewModel.selectedHigh.value.toString()
+            }
+        }
+        mainViewModel.selectedWeight.observe(viewLifecycleOwner) { value ->
+            if (value != null) {
+                binding.buttonL.visibility = View.INVISIBLE
+                binding.tvLength.text = mainViewModel.selectedWeight.value.toString()
+            }
+        }
+        mainViewModel.selectedLength.observe(viewLifecycleOwner) { value ->
+            if (value != null) {
+                binding.buttonA.visibility = View.INVISIBLE
+                binding.tvWeight.text = mainViewModel.selectedLength.value.toString()
             }
         }
     }

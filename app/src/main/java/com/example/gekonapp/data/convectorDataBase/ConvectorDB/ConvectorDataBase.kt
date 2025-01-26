@@ -17,6 +17,7 @@ abstract class ConvectorDataBase : RoomDatabase() {
     abstract fun selectedConvectorDao(): SelectedConvectorDao
 }
 
+
 val MIGRATION_2_3 = object : Migration(2, 3) {
     override fun migrate(database: SupportSQLiteDatabase) {
         // 1. Создать временную таблицу с правильным первичным ключом

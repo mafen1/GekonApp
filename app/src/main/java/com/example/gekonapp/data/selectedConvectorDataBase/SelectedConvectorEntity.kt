@@ -11,6 +11,6 @@ data class SelectedConvectorEntity (
     val article: String,
     val name: String,
     val power: Int,
-    val price: String,
-    val count: Int
+    var price: String,
+    var count: Int
 )

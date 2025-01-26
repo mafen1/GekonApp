@@ -16,7 +16,8 @@ class ShopViewModel @Inject constructor(
     private val selectedRepositoryImpl: SelectedConvectorRepositoryImpl
 ) : ViewModel() {
 
-    val selectedConvectorList: MutableLiveData<MutableList<SelectedConvectorEntity>> = MutableLiveData()
+    var selectedConvectorList: MutableLiveData<MutableList<SelectedConvectorEntity>> =
+        MutableLiveData()
 
     fun deleteSelectedConvector(
         number: Int,
@@ -33,8 +34,12 @@ class ShopViewModel @Inject constructor(
 
     fun selectedConvectorList() {
         viewModelScope.launch {
+            // todo IO
             withContext(Dispatchers.IO) {
-                selectedConvectorList.value = selectedRepositoryImpl.getConvector()
+                val selectedList = selectedRepositoryImpl.getConvector()
+                withContext(Dispatchers.Main) {
+                    selectedConvectorList.value = selectedList
+                }
             }
         }
     }

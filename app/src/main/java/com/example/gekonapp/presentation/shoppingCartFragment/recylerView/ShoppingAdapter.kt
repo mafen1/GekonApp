@@ -1,5 +1,6 @@
 package com.example.gekonapp.presentation.shoppingCartFragment.recylerView
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -9,65 +10,73 @@ import com.example.gekonapp.databinding.ShopItemBinding
 import com.example.gekonapp.presentation.shoppingCartFragment.viewModel.ShopViewModel
 
 class ShoppingAdapter(
-    var selectedConvectorList: MutableList<SelectedConvectorEntity>,
+    private var selectedConvectorList: MutableList<SelectedConvectorEntity>,
     val selectedConvectorViewModel: ShopViewModel
 ) : RecyclerView.Adapter<ShoppingAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ShopItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-            fun bind(selectedConvector: SelectedConvectorEntity){
+        fun bind(selectedConvector: SelectedConvectorEntity) {
 
-                // инициализируем textView
-                binding.tvName.text = selectedConvector.name
-                binding.tvCount.text = selectedConvector.count.toString()
-                binding.tvPrice.text = selectedConvector.price
-                binding.tvCount.text = selectedConvector.count.toString()
+            // инициализируем textView
+            binding.tvName.text = selectedConvector.name
+            binding.tvCount.text = selectedConvector.count.toString()
+            binding.tvPrice.text = selectedConvector.price
+            binding.tvCount.text = selectedConvector.count.toString()
 
-                binding.ivDelete.setOnClickListener{
-                    // удаляем выбранный конвертор
-                    selectedConvectorViewModel.deleteSelectedConvector(
-                        number = selectedConvector.number,
-                        article = selectedConvector.article,
-                        name = selectedConvector.name,
-                        power = selectedConvector.power,
-                        price = selectedConvector.price,
-                        count = selectedConvector.count
-                    )
-                }
-
-                binding.btnPlus.setOnClickListener {
-                    binding.tvCount.text = (
-                            binding.tvCount.text.toString().toInt() + 1
-                            ).toString()
-
-                    checkCountPrice(binding, selectedConvector)
-                }
-                binding.btnMinus.setOnClickListener {
-                    binding.tvCount.text = (
-                            if (binding.tvCount.text.toString().toInt() < 1) {
-                                Toast.makeText(
-                                    binding.root.context,
-                                    "Укажите корректное значение для напольного конвектора",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                binding.tvCount.text.toString().toInt()
-                            } else {
-                                binding.tvCount.text.toString().toInt() - 1
-                            }
-                            ).toString()
-
-                    checkCountPrice(binding, selectedConvector)
-                }
-
+            binding.ivDelete.setOnClickListener {
+                // удаляем выбранный конвертор
+                selectedConvectorViewModel.deleteSelectedConvector(
+                    number = selectedConvector.number,
+                    article = selectedConvector.article,
+                    name = selectedConvector.name,
+                    power = selectedConvector.power,
+                    price = selectedConvector.price,
+                    count = selectedConvector.count
+                )
             }
+
+            binding.btnPlus.setOnClickListener {
+
+                val newCount = selectedConvector.count + 1
+                Log.d("TAG", "btnPlus clicked: ${selectedConvector.name}")
+                selectedConvector.count = newCount // Обновляем данные в списке
+                Log.d("TAG","New count for ${selectedConvector.name}: $newCount")
+                binding.tvCount.text = newCount.toString()
+
+                notifyDataSetChanged()
+
+
+                checkCountPrice(binding, selectedConvector)
+            }
+            binding.btnMinus.setOnClickListener {
+                binding.tvCount.text = (
+                        if (binding.tvCount.text.toString().toInt() < 1) {
+                            Toast.makeText(
+                                binding.root.context,
+                                "Укажите корректное значение для напольного конвектора",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            binding.tvCount.text.toString().toInt()
+                        } else {
+                            binding.tvCount.text.toString().toInt() - 1
+                        }
+                        ).toString()
+
+                checkCountPrice(binding, selectedConvector)
+            }
+
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ShopItemBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        ))
+        return ViewHolder(
+            ShopItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int = selectedConvectorList.size
@@ -75,6 +84,7 @@ class ShoppingAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(selectedConvectorList[position])
+
     }
 
     private fun checkCountPrice(binding: ShopItemBinding, convector: SelectedConvectorEntity) {

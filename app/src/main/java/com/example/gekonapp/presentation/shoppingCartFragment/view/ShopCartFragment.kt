@@ -33,12 +33,12 @@ class ShopCartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initObserve()
     }
 
     private fun initView(){
         selectedViewModel.selectedConvectorList()
-        initAdapter(selectedViewModel.selectedConvectorList.value!!)
-
+//        Log.d("tag", selectedViewModel.selectedConvectorList.value!!.toString())
     }
 
     private fun initAdapter(selectedConvectorList: MutableList<SelectedConvectorEntity>){
@@ -47,5 +47,11 @@ class ShopCartFragment : Fragment() {
         binding.rcView1.layoutManager = LinearLayoutManager(binding.root.context)
     }
 
+    private fun initObserve(){
+        selectedViewModel.selectedConvectorList.observe(viewLifecycleOwner){ value ->
+            selectedViewModel.selectedConvectorList()
+            initAdapter(selectedViewModel.selectedConvectorList.value!!)
 
+        }
+    }
 }
